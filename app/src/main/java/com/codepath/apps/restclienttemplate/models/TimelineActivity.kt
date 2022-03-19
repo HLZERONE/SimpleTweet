@@ -1,9 +1,16 @@
 package com.codepath.apps.restclienttemplate.models
 
+import android.app.Activity
+import android.content.Intent
 import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,6 +30,7 @@ class TimelineActivity : AppCompatActivity() {
     lateinit var adapter: TweetsAdapter
 
     lateinit var swipeContainer: SwipeRefreshLayout
+
 
     val tweets = ArrayList<Tweet>()
 
@@ -50,6 +58,41 @@ class TimelineActivity : AppCompatActivity() {
         rvTweets.adapter = adapter
 
         populateHomeTimeline()
+    }
+
+    var editActivityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        // If the user comes back to this activity from EditActivity
+        // with no error or cancellation
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            // Get the data passed from EditActivity
+            if (data != null){
+                val tweet = data?.extras.getParcelable("tweet") as Tweet
+
+                //Update timeline
+                //Modifying the data source of tweet
+                tweets.add(0, tweet)
+
+                //Update adapter
+                adapter.notifyItemInserted(0)
+                rvTweets.smoothScrollToPosition(0)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.compose){
+            val intent = Intent(this, ComposeActivity::class.java)
+            editActivityResultLauncher.launch(intent)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun populateHomeTimeline(){

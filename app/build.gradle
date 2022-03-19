@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
@@ -9,13 +10,13 @@ def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.codepath.apps.restclienttemplate"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
