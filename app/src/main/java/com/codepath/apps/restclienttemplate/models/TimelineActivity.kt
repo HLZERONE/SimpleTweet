@@ -1,7 +1,10 @@
 package com.codepath.apps.restclienttemplate.models
 
+import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -58,6 +61,12 @@ class TimelineActivity : AppCompatActivity() {
         rvTweets.adapter = adapter
 
         populateHomeTimeline()
+
+        //set color
+        val actionBar = supportActionBar
+        val colorDrawable = ColorDrawable(Color.parseColor("#1DA1F2"))
+
+        actionBar?.setBackgroundDrawable(colorDrawable)
     }
 
     var editActivityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
